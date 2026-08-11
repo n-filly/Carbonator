@@ -3,9 +3,6 @@
 // Oh also, we might have to handle the case where users might input a negative value for the numerical inputs, but i am not sure if the api handles that atm
 // Update: I believed that the API turns negative values into 1 as an inputed value. And assumptions are now scrapped
 
-const authorization = "KEY HERE"; // This is subject to change since we might learn how to hide that
-const rapidAPIKey = "KEY HERE";
-
 const button1 = document.querySelector('#test');
 const button2 = document.querySelector('#test-1');
 const button3 = document.querySelector('#test-2');
@@ -77,9 +74,9 @@ let carbonUsageByCatLBS = {
 
 // Compute total emmision for a single query
 /*
-function compute total(dictionary, global) {
+function computeTotal(dictionary, global) {
     global = 0;
-    dictionary.forEach(function(category) {
+    Object.keys(dictionary).forEach(function(category) {
         global += dictionary[category];
     })
     return global;
@@ -87,22 +84,20 @@ function compute total(dictionary, global) {
 */
 
 async function fetchElec() {
-    try {
-        let response = await fetch("https://carbonsutra1.p.rapidapi.com/electricity_estimate", {
+    const endpoint = "/.netlify/functions/getElec";
+    const options = {
             method: 'POST',
-            headers: {
-                'Authorization' : `Bearer ${authorization}`,
-                'Content-Type' : 'application/x-www-form-urlencoded',
-                'x-rapidapi-host' : 'carbonsutra1.p.rapidapi.com',
-                'x-rapidapi-key' : rapidAPIKey
+            headers : {
+                'Content-Type' : "application/json"
             },
-            body : new URLSearchParams({
-                type : 'estimate-electricity',
+            body : JSON.stringify({
                 country_name : 'USA',
                 electricity_value : 100,
                 electricity_unit : 'kWh'
             })
-        });
+        }
+    try {
+        let response = await fetch(endpoint, options);
         let res = await response.json();
         console.log(res);
         return res;
@@ -113,22 +108,21 @@ async function fetchElec() {
 
 // We estimate using the vehicle's general type
 async function getVehicleCarbonEstimate() {
+    const endpoint = "/.netlify/functions/getVehicle";
+    const options = {
+        method : 'POST',
+        headers : {
+            'Content-Type' : "application/json"
+        }, 
+        body : JSON.stringify ({
+            vehicle_type : "Car-Type-Mini",
+            fuel_type : "Unknown",
+            distance_unit : "mi",
+            distance_value : 100,
+        })
+    }
     try {
-        let response = await fetch("https://carbonsutra1.p.rapidapi.com/vehicle_estimate_by_type", {
-            method : 'POST',
-            headers : {
-                'Authorization' : `Bearer ${authorization}`,
-                'Content-Type' : 'application/x-www-form-urlencoded',
-                'x-rapidapi-host' : 'carbonsutra1.p.rapidapi.com',
-                'x-rapidapi-key' : rapidAPIKey
-            },
-            body : new URLSearchParams({
-                vehicle_type : "Car-Type-Mini",
-                fuel_type : "Unknown",
-                distance_unit : "mi",
-                distance_value : 100,
-            })
-        });
+        let response = await fetch(endpoint, options);
         let res = await response.json();
         console.log(res)
         return res;
@@ -138,21 +132,20 @@ async function getVehicleCarbonEstimate() {
 }
 
 async function getFuelEstimate() {
+    const endpoint = "/.netlify/functions/getFuel";
+    const options = {
+        method : 'POST',
+        headers : {
+            'Content-Type' : "application/json"
+        }, 
+        body : JSON.stringify ({
+            fuel_usage : "Gas", // dropdown
+            fuel_name : "Propane", // dropdown based on the inputed from the above dropdown
+            fuel_value : 9 // in tonnes (1 ton = 1000kg) 
+        })
+    }
     try {
-        let response = await fetch("https://carbonsutra1.p.rapidapi.com/fuel_estimate ", {
-            method : 'POST',
-            headers : {
-                'Authorization' : `Bearer ${authorization}`,
-                'Content-Type' : 'application/x-www-form-urlencoded',
-                'x-rapidapi-host' : 'carbonsutra1.p.rapidapi.com',
-                'x-rapidapi-key' : rapidAPIKey
-            },
-            body : new URLSearchParams({
-                fuel_usage : "Gas", // dropdown
-                fuel_name : "Propane", // dropdown based on the inputed from the above dropdown
-                fuel_value : 9 // in tonnes (1 ton = 1000kg) 
-            })
-        });
+        let response = await fetch(endpoint, options);
         let res = await response.json();
         console.log(res)
         return res;
@@ -162,7 +155,8 @@ async function getFuelEstimate() {
 }
 
 /*
-function fuelInputCheck() {
+function fuelInputCheck(event) {
+    event.preventDefault();
     let fuelTypeSelect = document.querySelector();
     let fuelNamesSelect = document.querySelector();
 
@@ -171,7 +165,7 @@ function fuelInputCheck() {
     if (fuelTypeSelect.value === "") {
         return;
     } else {
-        let selectedCollection = fuelInputs[fuelTypeSelect];
+        let selectedCollection = fuelInputs[fuelTypeSelect.value];
         selectedCollection.forEach(function(name) {
             let newOption = document.createElement('option');
             newOption.value = name;
@@ -183,21 +177,20 @@ function fuelInputCheck() {
 */
 
 async function getShippingEstimate() {
-    try {
-        let response = await fetch("https://carbonsutra1.p.rapidapi.com/freight_estimate" , {
-            method : 'POST',
-            headers : {
-                'Authorization' : `Bearer ${authorization}`,
-                'Content-Type' : 'application/x-www-form-urlencoded',
-                'x-rapidapi-host' : 'carbonsutra1.p.rapidapi.com',
-                'x-rapidapi-key' : rapidAPIKey
-            },
-            body : new URLSearchParams({
-                transport_mode : "Air",
-                freight_weight : 2, // In kg, (1kg = 1000g)
-                distance_value : 2200 // In km (1km = 1000m)
-            })
+    const endpoint = "/.netlify/functions/getShipping";
+    const options = {
+        method : 'POST',
+        headers : {
+            'Content-Type' : "application/json"
+        }, 
+        body : JSON.stringify ({
+            transport_mode : "Air",
+            freight_weight : 2, // In kg, (1kg = 1000g)
+            distance_value : 2200 // In km (1km = 1000m)
         })
+    }
+    try {
+        let response = await fetch(endpoint, options);
         let res = await response.json();
         console.log(res)
         return res;
@@ -209,6 +202,7 @@ async function getShippingEstimate() {
 // Maybe a reset button if the user want to remove everything instead of letting them manually edit everything to default?
 /*
 function resetAllInputContent(event) {
+    event.preventDefault();
     const containers = document.querySelectorAll();
     containers.forEach(function(container){
         let id = container.id;
@@ -217,22 +211,37 @@ function resetAllInputContent(event) {
 
     totalCO2Estimate = 0;
     totalCO2EstimateLBS = 0;
-    carbonUsageByCat.forEach(function(key) {
+    Object.keys(carbonUsageByCat).forEach(function(key) {
         carbonUsageByCat[key] = 0;
+        carbonUsageByCatLBS[key] = 0;
     });  
 }
 */
 
-// Clear a single section if the user no longer wants to calculate that
+// Clear a single section if the user no longer wants to calculate that, the parameter takes in the container_id
+// I kinda recommend that the id matches the dictionary key to reset the value
 /*
-function clearSingleSection(id?){
-    const containersID = document.querySelector();
-    somehow loop through the form elements and reset that?
+function clearSingleSection(event, id){
+    event.preventDefault();
+    const containersID = document.querySelector('#${id}');
+    const inputs = document.querySelectorAll('class name?');
+
+    inputs.forEach(function(input) {
+        if () {
+
+        } else if () {
+
+        } else {
+        
+        }
+    });
+    carbonUsageByCat[id] = 0;
+    carbonUsageByCatLBS[id] = 0;
 } 
 */
 
 /* Set event listener to the individual clear containers
-indivResetFunction.forEach(function(btn) {
+indivResetBtn.forEach(function(btn) {
     let id = btn.id;
     id.addEventListener('click', clearSingleSection);
 })
@@ -241,8 +250,17 @@ indivResetFunction.forEach(function(btn) {
 // Local storage of the 3 most recent calculation? (is it possible to have the history show what the user has input for each container?)
 // Might scrap this if its too complicated or its just an overkill for this project setting
 /*
-function saveToLocalStorage(param1, param2, ..., param-n) {
+function saveToLocalStorage(event, param1, param2, ..., param-n) {
+    event.preventDefault();
     localStorage.setItem(, );
+}
+
+function clearQuery(event) {
+    event.preventDefault();
+}
+
+function clearLocalMemory(event){
+    event.preventDefault();
 }
 */
 
