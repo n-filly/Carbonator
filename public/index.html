@@ -4,16 +4,126 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="style.css">
     <script type="module" src="main.js"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Zalando+Sans:ital,wght@0,200..900;1,200..900&display=swap" rel="stylesheet">
+
 </head>
-<body>
-    ++ This is a test file, remove this file in the final submission. Only the console will print btw.
-    <br>
-    <button id="test">test Electricity</button>
-    <button id="test-1">test Vehicle Comsumption based on Type</button>
-    <button id="test-2">test Fuel Consumption</button>
-    <button id="test-3">test Freight Shipping</button>
-    <br>
-    <img src="images/stolas1(just for fun, don't use this in the final presentation).gif">
+<body id="homepage">
+    <header>
+        <nav>
+
+            <a href="index.html">
+                <img class="nav-logo" src="images/carbonator-logo.JPG" alt="carbonator navigation">
+            </a>
+
+            <ul class="nav-options">
+                <li> <a href="resources.html">Resources</a> </li>
+                <li> <a href="about-us.html">About Us</a> </li>
+                <li> <a href="reach-out.html">Reach Out</a> </li>
+            </ul>
+
+        </nav>
+    </header>
+    
+
+    <form>
+        <div class="col-xxl-4">
+
+            <div class="card">
+                <div class="card-body">
+                    <h2>Electricity</h2>
+
+                    <label for="electricity-country-input" class="label">In what country was the electricity consumed?</label>
+                    <select id="electricity-country-input"></select>
+
+                    <label for="electricity-num-input" class="label">How much electricity was consumed?</label>
+                    <select id="electricity-num-input"></select>
+                
+                    <label for="electricity-unit-input" class="label">What is the unit of measurement?</label>
+                    <select id="electricity-unit-input"></select>
+
+
+                    <button type="button">RESET</button>
+                </div>
+            </div>
+
+            <div class="card row">
+                <div class="card-body">
+                    <h2>Hotel Stay</h2>
+                    
+                    <label for="hotel-country-input" class="label">In which country or city was the hotel located?</label>
+                    <select id="hotel-country-input"></select>
+
+                    <label for="hotel-nights-input" class="label">How many nights did you stay?</label>
+                    <select id="hotel-nights-input"></select>
+
+                    <button type="button">RESET</button>
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="col-xxl-4 row">
+
+            <div class="card" id="center-card">
+                <div class="card-body">
+                    <h2>Your emissions are comparable to:</h2>
+                    <h3 id="total-emissions">placeholder text</h3>
+                    <p>here can be an if or statement that details what your emissions are comparable to, like ex: "Your emissions are equivalent to a jet flight going around the earth!</p>
+                    <button type="button">RESET ALL</button>
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="col-xxl-4 row">
+
+            <div class="card">
+                <div class="card-body">
+                    <h2>Vehicles</h2>
+                
+                    <label for="vehicle-size-input" class="label">What is the category/size of the vehicle?</label>
+                    <select id="vehicle-size-input"></select>
+
+                    <label for="vehicle-fuel-input" class="label">What type of fuel does it use?</label>
+                    <select id="vehicle-fuel-input"></select>
+
+                    <label for="vehicle-distance-input" class="label">What distance was traveled?</label>
+                    <select id="vehicle-distance-input"></select>
+
+
+                    <button type="button">RESET</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-body">
+                    <h2>Flights</h2>
+                    <label for="flights-departure-input" class="label">What is your departure airport?</label>
+                    <select id="flights-departure-input"></select>
+
+                    <label for="flights-destination-input" class="label">What is your destination airport?</label>
+                    <select id="flights-destination-input"></select>
+
+                    <label for="flights-class-input" class="label">What class did you travel in?</label>
+                    <select id="flights-class-input"></select>
+
+
+                    <button type="button">RESET</button>
+                </div>
+            </div>
+
+        </div>
+    </form>
+
+    <footer>
+        <p>&copy; Carbonator 2026. All rights reserved.</p>
+    </footer>
 </body>
 </html>
