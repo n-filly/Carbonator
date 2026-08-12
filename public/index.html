@@ -65,18 +65,25 @@
                     
                     <label for="fuel-type-input" class="label">What kind of fuel was burned?</label>
                     <select id="fuel-type-input" class="fuel">
-                        <option value="">Select fuel type</option>
+                        <option value="">Select Fuel type</option>
                         <option value="Gas">Gas</option>
                         <option value="Liquid">Liquid</option>
                         <option value="Solid">Solid</option>
                     </select>
 
-                    <label for="fuel-amount-input" class="label">What is the name of the fuel?</label>
+                    <label for="fuel-name-input" class="label">What is the name of the fuel?</label>
                     <select id="fuel-name-input" class="fuel">
-                        <option value="">Select fuel name</option>
+                        <option value="">Select Fuel name</option>
                     </select>
 
-                    <label for="fuel-amount-input" class="label">In metric tonnes, how much of that fuel you are using?</label>
+                    <label for="fuel-unit-input" class="label">What weight unit do you want to use</label>
+                    <select id="fuel-unit-input" class="fuel">
+                        <option value="">Select mass unit</option>
+                        <option value="kg">Kilograms (kg)</option>
+                        <option value="lbs">Pounds (lbs)</option>
+                    </select>
+
+                    <label for="fuel-amount-input" class="label">How much of that fuel you are using?</label>
                     <input type="number" id="fuel-amount-input" class="fuel" min="0"></input>
 
                     <div id="fuel-result" class="carbon-result"></div>

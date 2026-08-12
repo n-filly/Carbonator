@@ -317,9 +317,19 @@ function resetAllInputContent(event) {
     event.preventDefault();
     const containers = document.querySelectorAll('.card-body');
     containers.forEach(function(container){
-        let id = container.id;
-        clearSingleSection(); 
-    })
+        const inputs = container.querySelectorAll('input, select');
+
+        inputs.forEach(function(input) {
+            input.value = "";
+        });
+
+        const containerResult = container.querySelector('.carbon-result');
+        containerResult.innerHTML = "";
+    });
+
+    const fuelNamesSelect = document.querySelector('#fuel-name-input');
+
+    fuelNamesSelect.innerHTML = '<option value="">Select fuel name</option>';
 
     totalCO2Estimate = 0;
     totalCO2EstimateLBS = 0;
@@ -334,14 +344,22 @@ function resetAllInputContent(event) {
 function clearSingleSection(event){
     event.preventDefault();
     const btn = event.currentTarget;
+    console.log(btn);
 
-    const currContainer = btn.closest('.card-body');
+    const id = btn.id;
 
-    const inputs = currContainer.querySelectorAll('input, select');
+    const inputs = document.querySelectorAll(`.${id}`);
+
+    if (id == 'fuel') {
+        fuelInputCheck(event);
+    }
     
     inputs.forEach(function(input) {
-        input.value="";
+        input.value = "";
     });
+
+    const result = document.querySelector(`#${id}-result`);
+    result.innerHTML = "";
 
     totalCO2Estimate -= carbonUsageByCat[btn.id];
     totalCO2EstimateLBS -= carbonUsageByCatLBS[btn.id];
