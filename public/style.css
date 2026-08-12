@@ -104,11 +104,21 @@ nav {
 
 /*
 */
+.fuel-name-container {
+    display : none;
+}
+
+ul {
+    list-style-type: none;
+    padding-left: 0;
+    font-size: 24px;
+    text-align: center
+}
 
 .card {
     background-color: #A9B3D6;
     width: 350px;
-    height: 350px;
+    min-height: 350px;
     border-radius: 50px;
     padding: 21px;
     margin: 20px;

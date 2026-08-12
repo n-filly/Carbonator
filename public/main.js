@@ -120,10 +120,10 @@ async function fetchElec(event) {
         let res = await response.json();
 
         let oldElec = carbonUsageByCat['elec'];
-        let oldElecLBS = carbonUsageByCatLBS['elec']
+        let oldElecLBS = carbonUsageByCatLBS['elec'];
 
-        carbonUsageByCat['elec'] = res.co2e_kg;
-        carbonUsageByCatLBS['elec'] = res.co2e_lb;
+        carbonUsageByCat['elec'] = res.data['co2e_kg'];
+        carbonUsageByCatLBS['elec'] = res.data['co2e_lb'];
 
         totalCO2Estimate += carbonUsageByCat['elec'] - oldElec;
         totalCO2EstimateLBS += carbonUsageByCatLBS['elec'] - oldElecLBS;
@@ -166,8 +166,8 @@ async function getVehicleCarbonEstimate(event) {
         let oldVehicle = carbonUsageByCat['vehicle'];
         let oldVehicleLBS = carbonUsageByCatLBS['vehicle'];
 
-        carbonUsageByCat['vehicle'] = res.co2e_kg;
-        carbonUsageByCatLBS['vehicle'] = res.co2e_lb;
+        carbonUsageByCat['vehicle'] = res.data['co2e_kg'];
+        carbonUsageByCatLBS['vehicle'] = res.data['co2e_lb'];
 
         totalCO2Estimate += carbonUsageByCat['vehicle'] - oldVehicle;
         totalCO2EstimateLBS += carbonUsageByCatLBS['vehicle'] - oldVehicleLBS;
@@ -235,8 +235,8 @@ async function getFuelEstimate(event) {
         let oldFuel = carbonUsageByCat['fuel'];
         let oldFuelLBS = carbonUsageByCatLBS['fuel'];
 
-        carbonUsageByCat['fuel'] = res.co2e_kg;
-        carbonUsageByCatLBS['fuel'] = res.co2e_lb;
+        carbonUsageByCat['fuel'] = res.data['co2e_kg'];
+        carbonUsageByCatLBS['fuel'] = res.data['co2e_lb'];
 
         totalCO2Estimate += carbonUsageByCat['fuel'] - oldFuel;
         totalCO2EstimateLBS += carbonUsageByCatLBS['fuel'] - oldFuelLBS;
@@ -251,20 +251,26 @@ async function getFuelEstimate(event) {
 
 function fuelInputCheck(event) {
     event.preventDefault();
-    let fuelTypeSelect = document.querySelector('#fuel-type-input');
-    let fuelNamesSelect = document.querySelector('#fuel-name-input');
 
-    fuelNamesSelect.innerHTML = `<option value="">Select Fuel Name</option>`;
+    let fuelTypeSelect = document.querySelector('#fuel-type-input');
+    let fuelNamesContainer = document.querySelector('.fuel-name-container');
 
     if (fuelTypeSelect.value === "") {
+        fuelNamesContainer.style.display = 'none';
         return;
     } else {
+        fuelNamesContainer.style.display = 'block';
+        let nameDropdown = document.querySelector('#fuel-name-input');
+
+        nameDropdown.innerHTML = `<option value="">Select Fuel Name</option>`;
+
         let selectedCollection = fuelInputs[fuelTypeSelect.value];
+
         selectedCollection.forEach(function(name) {
             let newOption = document.createElement('option');
             newOption.value = name;
             newOption.textContent = name;
-            fuelNamesSelect.appendChild(newOption);
+            nameDropdown.appendChild(newOption);
         });   
     }
 }
@@ -287,8 +293,8 @@ async function getShippingEstimate(event) {
         }, 
         body : JSON.stringify ({
             transport_mode : shippingMethod,
-            freight_weight : freightWeight, // In kg, (1kg = 1000g)
-            distance_value : freightDist // In km (1km = 1000m)
+            freight_weight : freightWeight,
+            distance_value : freightDist
         })
     }
     try {
@@ -298,8 +304,8 @@ async function getShippingEstimate(event) {
         let oldFreight = carbonUsageByCat['freight'];
         let oldFreightLBS = carbonUsageByCatLBS['freight'];
 
-        carbonUsageByCat['freight'] = res.co2e_kg;
-        carbonUsageByCatLBS['freight'] = res.co2e_lb;
+        carbonUsageByCat['freight'] = res.data['co2e_kg'];
+        carbonUsageByCatLBS['freight'] = res.data['co2e_lb'];
 
         totalCO2Estimate += carbonUsageByCat['freight'] - oldFreight;
         totalCO2EstimateLBS += carbonUsageByCatLBS['freight'] - oldFreightLBS;
@@ -315,10 +321,18 @@ async function getShippingEstimate(event) {
 // Maybe a reset button if the user want to remove everything instead of letting them manually edit everything to default?
 function resetAllInputContent(event) {
     event.preventDefault();
-    const containers = document.querySelectorAll('.card-body');
-    containers.forEach(function(container){
-        let id = container.id;
-        clearSingleSection(); 
+
+    const inputs = document.querySelectorAll('input, select');
+    inputs.forEach(function(input) {
+        input.value = "";
+        if (input.id === 'fuel-type-input') {
+            fuelInputCheck(event);
+        }
+    });
+
+    const containerResult = document.querySelectorAll('.carbon-result');
+    containerResult.forEach(function(result) {
+        result.innerHTML = "";
     })
 
     totalCO2Estimate = 0;
@@ -334,14 +348,22 @@ function resetAllInputContent(event) {
 function clearSingleSection(event){
     event.preventDefault();
     const btn = event.currentTarget;
+    console.log(btn);
 
-    const currContainer = btn.closest('.card-body');
+    const id = btn.id;
 
-    const inputs = currContainer.querySelectorAll('input, select');
+    const inputs = document.querySelectorAll(`.${id}`);
     
     inputs.forEach(function(input) {
-        input.value="";
+        input.value = "";
     });
+
+    if (id == 'fuel') {
+        fuelInputCheck(event);
+    }
+
+    const result = document.querySelector(`#${id}-result`);
+    result.innerHTML = "";
 
     totalCO2Estimate -= carbonUsageByCat[btn.id];
     totalCO2EstimateLBS -= carbonUsageByCatLBS[btn.id];
@@ -355,7 +377,20 @@ indivResetBtn.forEach(function(btn) {
     btn.addEventListener('click', clearSingleSection);
 })
 
+function compareEmission() {
+    const kgRes = document.querySelector('#kg');
+    const lbRes = document.querySelector('#lbs');
+    const compareTo = document.querySelector('#total-emissions');
+    const resultText = document.querySelector('#final-result');
 
+    kgRes.textContent = `In kg: ${totalCO2Estimate}kg`;
+    lbRes.textContent = `In lbs: ${totalCO2EstimateLBS}lbs`;
+
+    if (totalCO2Estimate === 0) {
+        compareTo.textContent = 'Stolas';
+        resultText.textContent = 'You are like this demon owl prince!';
+    }
+}
 // Local storage of the 3 most recent calculation? (is it possible to have the history show what the user has input for each container?)
 // Might scrap this if its too complicated or its just an overkill for this project setting
 /*
@@ -387,3 +422,4 @@ document.querySelector('#fuel-type-input').addEventListener('change', fuelInputC
 
 populateDropdowns(countryList, 'electricity-country-input');
 populateDropdowns(vehicleTypesList, 'vehicle-size-input');
+compareEmission();
