@@ -65,16 +65,18 @@
                     
                     <label for="fuel-type-input" class="label">What kind of fuel was burned?</label>
                     <select id="fuel-type-input" class="fuel">
-                        <option value="">Select Fuel type</option>
+                        <option value="">Select Fuel Type</option>
                         <option value="Gas">Gas</option>
                         <option value="Liquid">Liquid</option>
                         <option value="Solid">Solid</option>
                     </select>
 
-                    <label for="fuel-name-input" class="label">What is the name of the fuel?</label>
-                    <select id="fuel-name-input" class="fuel">
-                        <option value="">Select Fuel name</option>
-                    </select>
+                    <div class="fuel-name-container">
+                        <label for="fuel-name-input" class="label">What is the name of the fuel?</label>
+                        <select id="fuel-name-input" class="fuel">
+                            <option value="">Select Fuel Name</option>
+                        </select>
+                    </div>
 
                     <label for="fuel-unit-input" class="label">What weight unit do you want to use</label>
                     <select id="fuel-unit-input" class="fuel">
@@ -100,9 +102,14 @@
 
             <div class="card" id="center-card">
                 <div class="card-body">
+                    <h2>Total estimated emissions:</h2>
+                    <ul>
+                        <li id="kg"></li>
+                        <li id="lbs"></li>
+                    </ul>
                     <h2>Your emissions are comparable to:</h2>
-                    <h3 id="total-emissions">placeholder text</h3>
-                    <p>here can be an if or statement that details what your emissions are comparable to, like ex: "Your emissions are equivalent to a jet flight going around the earth!</p>
+                    <h3 id="total-emissions"></h3>
+                    <div id="final-result"></div>
                     <button type="button" id="reset-all">RESET ALL</button>
                 </div>
             </div>
