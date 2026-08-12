@@ -38,16 +38,24 @@
                     <h2>Electricity</h2>
 
                     <label for="electricity-country-input" class="label">In what country was the electricity consumed?</label>
-                    <select id="electricity-country-input"></select>
+                    <select id="electricity-country-input" class="elec">
+                        <option value="">Select country</option>
+                    </select>
 
                     <label for="electricity-num-input" class="label">How much electricity was consumed?</label>
-                    <select id="electricity-num-input"></select>
+                    <input type="number" id="electricity-num-input" class="elec" min="0"></input>
                 
                     <label for="electricity-unit-input" class="label">What is the unit of measurement?</label>
-                    <select id="electricity-unit-input"></select>
+                    <select id="electricity-unit-input" class="elec">
+                        <option value="">Select the electrical unit</option>
+                        <option value="kWh">kWh</option>
+                        <option value="MWh">MWh</option>
+                    </select>
+                    
+                    <div id="elec-result" class="carbon-result"></div>
 
-
-                    <button type="button">RESET</button>
+                    <button type="button" id="elec-calc">Calculate</button>
+                    <button type="button" class="reset" id="elec">RESET</button>
                 </div>
             </div>
 
@@ -56,15 +64,25 @@
                     <h2>Fuel</h2>
                     
                     <label for="fuel-type-input" class="label">What kind of fuel was burned?</label>
-                    <select id="fuel-type-input"></select>
+                    <select id="fuel-type-input" class="fuel">
+                        <option value="">Select fuel type</option>
+                        <option value="Gas">Gas</option>
+                        <option value="Liquid">Liquid</option>
+                        <option value="Solid">Solid</option>
+                    </select>
 
-                    <label for="fuel-amount-input" class="label">How much fuel was burned?</label>
-                    <select id="fuel-amount-input"></select>
+                    <label for="fuel-amount-input" class="label">What is the name of the fuel?</label>
+                    <select id="fuel-name-input" class="fuel">
+                        <option value="">Select fuel name</option>
+                    </select>
 
-                    <label for="fuel-units-input" class="label">What is the measurement unit?</label>
-                    <select id="fuel-units-input"></select>
+                    <label for="fuel-amount-input" class="label">In metric tonnes, how much of that fuel you are using?</label>
+                    <input type="number" id="fuel-amount-input" class="fuel" min="0"></input>
 
-                    <button type="button">RESET</button>
+                    <div id="fuel-result" class="carbon-result"></div>
+
+                    <button type="button" id="fuel-calc">Calculate</button>
+                    <button type="button" class="reset" id="fuel">RESET</button>
                 </div>
             </div>
 
@@ -78,7 +96,7 @@
                     <h2>Your emissions are comparable to:</h2>
                     <h3 id="total-emissions">placeholder text</h3>
                     <p>here can be an if or statement that details what your emissions are comparable to, like ex: "Your emissions are equivalent to a jet flight going around the earth!</p>
-                    <button type="button">RESET ALL</button>
+                    <button type="button" id="reset-all">RESET ALL</button>
                 </div>
             </div>
 
@@ -92,16 +110,34 @@
                     <h2>Vehicles</h2>
                 
                     <label for="vehicle-size-input" class="label">What is the category/size of the vehicle?</label>
-                    <select id="vehicle-size-input"></select>
+                    <select id="vehicle-size-input" class="vehicle">
+                        <option value="">Select Vehicle Type</option>
+                    </select>
 
                     <label for="vehicle-fuel-input" class="label">What type of fuel does it use?</label>
-                    <select id="vehicle-fuel-input"></select>
+                    <select id="vehicle-fuel-input" class="vehicle">
+                        <option value="">Select fuel type</option>
+                        <option value="Unknown">Unknown</option>
+                        <option value="Diesel">Diesel</option>
+                        <option value="Petrol">Petrol</option>
+                        <option value="PHEV">PHEV</option>
+                        <option value="BEV">BEV</option>
+                    </select>
+
+                    <label for="vehicle-unit-input" class="label">Distance unit</label>
+                    <select id="vehicle-unit-input" class="vehicle">
+                        <option value="">Select distance unit</option>
+                        <option value="mi">Miles (mi)</option>
+                        <option value="km">Kilometres (km)</option>
+                    </select>
 
                     <label for="vehicle-distance-input" class="label">What distance was traveled?</label>
-                    <select id="vehicle-distance-input"></select>
+                    <input type="number" id="vehicle-distance-input" class="vehicle" min="0"></input>
 
+                    <div id="vehicle-result" class="carbon-result"></div>
 
-                    <button type="button">RESET</button>
+                    <button type="button" id="vehicle-calc">Calculate</button>
+                    <button type="button" class="reset" id="vehicle">RESET</button>
                 </div>
             </div>
 
@@ -109,21 +145,41 @@
                 <div class="card-body">
                     <h2>Shipping</h2>
                     <label for="shipping-method-input" class="label">How are the goods being shipped?</label>
-                    <select id="shipping-method-input"></select>
+                    <select id="shipping-method-input" class="freight">
+                        <option value="">Select shipping options</option>
+                        <option value="Air">Air</option>
+                        <option value="Rail">Rail</option>
+                        <option value="Road">Road</option>
+                        <option value="ShortSea">ShortSea</option>
+                        <option value="DeepSea">DeepSea</option>
+                        <option value="Road-Rail">Road-Rail</option>
+                        <option value="Road-ShortSea">Road-DeepSea</option>
+                    </select>
 
                     <label for="shipping-weight-input" class="label">How heavy is the cargo shipment?</label>
-                    <select id="shipping-weight-input"></select>
+                    <input type="number" id="shipping-weight-input" min="0" class="freight"></input>
 
                     <label for="shipping-w-units-input" class="label">What is the weight unit?</label>
-                    <select id="shipping-w-units-input"></select>
+                    <select id="shipping-w-units-input" class="freight">
+                        <option value="">Select mass unit</option>
+                        <option value="kg">Kilograms (kg)</option>
+                        <option value="lbs">Pounds (lbs)</option>
+                    </select>
 
                     <label for="shipping-distance-input" class="label">How far is the shipment traveling?</label>
-                    <select id="shipping-distance-input"></select>
+                    <input type="number" id="shipping-distance-input" min="0" class="freight"></input>
 
                     <label for="shipping-d-units-input" class="label">What is the distance unit?</label>
-                    <select id="shipping-d-units-input"></select>
+                    <select id="shipping-d-units-input" class="freight">
+                        <option value="">Select distance unit</option>
+                        <option value="mi">Miles (mi)</option>
+                        <option value="km">Kilometres (km)</option>
+                    </select>
 
-                    <button type="button">RESET</button>
+                    <div id="shipping-result" class="carbon-result"></div>
+
+                    <button type="button" id="shipping-calc">Calculate</button>
+                    <button type="button" class="reset" id="freight">RESET</button>
                 </div>
             </div>
 
