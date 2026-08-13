@@ -632,3 +632,22 @@ button8.addEventListener('click', () => {
         localStorage.removeItem(item.id);
     });
 });
+
+//
+
+const emissionComparison = document.querySelector('#total-emissions');
+
+const kgComparison = document.querySelector('#kg');
+const lbComparison = document.querySelector('#lb');
+
+if (5 >= kgComparison >= 0 || 11 >= lbComparison >= 0) {
+    emissionComparison = `<li> <ul></ul> <ul></ul> <ul></ul> </li>`;
+} else if (50 >= kgComparison > 5 || 110 >= lbComparison > 11) {
+    emissionComparison = `<li> <ul></ul> <ul></ul> <ul></ul> </li>`;
+} else if (500 >= kgComparison > 50 || 1100 >= lbComparison > 110) {
+    emissionComparison = `<li> <ul></ul> <ul></ul> <ul></ul> </li>`;
+} else if (5000 >= kgComparison > 500 || 11000 >= lbComparison > 1100) {
+    emissionComparison = `<li> <ul></ul> <ul></ul> <ul></ul> </li>`;
+} else if (kgComparison > 5000 || lbComparison > 11000) {
+    emissionComparison = `<li> <ul></ul> <ul></ul> <ul></ul> </li>`;
+};
