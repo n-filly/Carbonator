@@ -587,7 +587,7 @@ function showHistory() {
                 `;
             item.id = key;
             item.addEventListener('click', clearQuery);
-            list.prepend(item);
+            list.append(item);
         }
     }
 }

@@ -185,7 +185,7 @@ footer > p {
     border: solid 0.25px black;
 }
 
-#saved-calc:has(li) {
+#saved-calc li {
     margin-bottom: 20px;
     padding: 20px 40px;
     border: solid 5px #f2d56e;
@@ -199,7 +199,7 @@ footer > p {
     cursor: pointer;
 }
 
-#saved-calc:has(li.clearQuery) {
+#saved-calc li.clearQuery {
     background-color: #c1c1c1;
     text-decoration: line-through;
 }
