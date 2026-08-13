@@ -628,7 +628,7 @@ button7.addEventListener('click', () => {
 
 button8.addEventListener('click', () => {
     const removedItems = document.querySelectorAll('.removed');
-    removedItems.forEach(item => {
+    removedItems.forEach(function(item) {
         localStorage.removeItem(item.id);
     });
 });
