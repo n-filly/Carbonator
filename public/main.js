@@ -605,6 +605,7 @@ function clearQuery(event) {
     event.preventDefault();
     this.classList.add('removed');
     let id = this.id;
+    this.removeEventListener('click', clearQuery);
     this.addEventListener('click', unselect);
 }
 
