@@ -623,7 +623,6 @@ function clearQuery(event) {
     event.preventDefault();
     this.classList.add('removed');
     let id = this.id;
-    this.removeEventListener('click', clearQuery);
     this.addEventListener('click', unselect);
 }
 
@@ -654,8 +653,10 @@ button7.addEventListener('click', () => {
 
 button8.addEventListener('click', () => {
     const removedItems = document.querySelectorAll('.removed');
+    console.log('clicked');
     removedItems.forEach(function(item) {
         localStorage.removeItem(item.id);
+        item.remove();
     });
 });
 
