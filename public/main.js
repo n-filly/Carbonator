@@ -261,7 +261,7 @@ async function getFuelEstimate(event) {
         body : JSON.stringify ({
             fuel_usage : fuelType,
             fuel_name : fuelName,
-            fuel_value : unit === 'kg' ? intFuel / 1000 : convertLBStoKG(intFuel) / 1000 // convert to metric tonnes
+            fuel_value : unit === 'kg' ? intFuel / 1000 : convertLBSToKG(intFuel) / 1000 // convert to metric tonnes
         })
     }
     try {
@@ -321,7 +321,7 @@ function fuelInputCheck(event) {
 
 async function getShippingEstimate(event) {
     event.preventDefault();
-    const shippingResult = document.querySelector('#shipping-result');
+    const shippingResult = document.querySelector('#freight-result');
 
     if (!inputCheck('freight-container')) {
         shippingResult.textContent = "Please make sure to include an answer for each item.";
@@ -456,7 +456,7 @@ function clearSingleSection(event){
         fuelInputCheck(event);
     }
 
-    const result = document.querySelector(`#${id}-result`);
+    let result = document.querySelector(`#${id}-result`);
     result.innerHTML = "";
 
     let selectedDictionary = dictionarySelection[id];
@@ -479,29 +479,22 @@ indivResetBtn.forEach(function(btn) {
 function computeEmission() {
     const kgRes = document.querySelector('#kg');
     const lbRes = document.querySelector('#lbs');
-    const compareTo = document.querySelector('#total-emissions');
-    const resultText = document.querySelector('#final-result');
+    let compareTo = document.querySelector('#total-emissions');
 
     kgRes.textContent = `In kg: ${totalCO2Estimate.toFixed(2)} kg`;
     lbRes.textContent = `In lbs: ${totalCO2EstimateLBS.toFixed(2)} lbs`;
-
-    if (totalCO2Estimate === 0) {
-        compareTo.textContent = 'Stolas';
-        resultText.textContent = 'You are like this demon owl prince!';
-    }
-
     //
 
     if (5 >= kgRes >= 0 || 11 >= lbRes >= 0) {
-    compareTo = `<li> <ul>Charging a smartphone daily</ul> <ul>Leaving a laptop plugged in all day</ul> <ul>Using a microwave or toaster a few times</ul> </li>`;
+    compareTo.textContent = `<li> <ul>Charging a smartphone daily</ul> <ul>Leaving a laptop plugged in all day</ul> <ul>Using a microwave or toaster a few times</ul> </li>`;
     } else if (50 >= kgRes > 5 || 110 >= lbRes > 11) {
-    compareTo = `<li> <ul>Driving a standard car for about 100 miles</ul> <ul>Running a typical household's electricity for one single day</ul> <ul>Burning a small tank of propane on a backyard grill</ul> </li>`;
+    compareTo.textContent = `<li> <ul>Driving a standard car for about 100 miles</ul> <ul>Running a typical household's electricity for one single day</ul> <ul>Burning a small tank of propane on a backyard grill</ul> </li>`;
     } else if (500 >= kgRes > 50 || 1100 >= lbRes > 110) {
-    compareTo = `<li> <ul>Flying one-way on a short commercial flight</ul> <ul>Powering a large apartment's electricity for a full month</ul> <ul>Ordering a heavy freight shipment from across the country</ul> </li>`;
+    compareTo.textContent = `<li> <ul>Flying one-way on a short commercial flight</ul> <ul>Powering a large apartment's electricity for a full month</ul> <ul>Ordering a heavy freight shipment from across the country</ul> </li>`;
     } else if (5000 >= kgRes > 500 || 11000 >= lbRes > 1100) {
-    compareTo = `<li> <ul>Driving an average gas-powered car for a whole year</ul> <ul>Taking multiple long-distance international flights</ul> <ul>Heating a large house with oil or gas through a freezing winter</ul> </li>`;
+    compareTo.textContent = `<li> <ul>Driving an average gas-powered car for a whole year</ul> <ul>Taking multiple long-distance international flights</ul> <ul>Heating a large house with oil or gas through a freezing winter</ul> </li>`;
     } else if (kgRes > 5000 || lbRes > 11000) {
-    compareTo = `<li> <ul>Moving heavy cargo shipments across oceans on a massive container ship</ul> <ul>The total yearly carbon footprint of an entire family</ul> <ul>Powering a small business office building for a year</ul> </li>`;
+    compareTo.textContent = `<li> <ul>Moving heavy cargo shipments across oceans on a massive container ship</ul> <ul>The total yearly carbon footprint of an entire family</ul> <ul>Powering a small business office building for a year</ul> </li>`;
     };
 }
 
@@ -516,11 +509,11 @@ function inputCheck(containerID) {
     return true;
 }
 
-function convertLBStoKG(amountLBS) {
+function convertLBSToKG(amountLBS) {
     return amountLBS / 2.20462262185;
 }
 
-function convertMItoKM(amountMI) {
+function convertMIToKM(amountMI) {
     return amountMI * 1.609344;
 }
 
