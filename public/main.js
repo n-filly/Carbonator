@@ -165,7 +165,7 @@ async function fetchElec(event) {
         totalCO2EstimateLBS += carbonUsageByCatLBS['elec'] - oldElecLBS;
 
         elecResult.innerHTML = `Your carbon usage is ${carbonUsageByCat['elec'].toFixed(2)}kg 
-                                (or ${carbonUsageByCatLBS['elec'].toFixed(2)}lbs) for Electricity usage`;
+                                (or ${carbonUsageByCatLBS['elec'].toFixed(2)} lbs) for Electricity usage`;
         console.log(res);
         computeEmission();
 
@@ -221,7 +221,7 @@ async function getVehicleCarbonEstimate(event) {
         totalCO2EstimateLBS += carbonUsageByCatLBS['vehicle'] - oldVehicleLBS;
 
         vehicleResult.innerHTML = `Your carbon usage is ${carbonUsageByCat['vehicle'].toFixed(2)}kg
-                                     (or ${carbonUsageByCatLBS['vehicle'].toFixed(2)}lbs)`;
+                                     (or ${carbonUsageByCatLBS['vehicle'].toFixed(2)} lbs)`;
         console.log(res);
         computeEmission();
 
@@ -277,7 +277,7 @@ async function getFuelEstimate(event) {
         totalCO2Estimate += carbonUsageByCat['fuel'] - oldFuel;
         totalCO2EstimateLBS += carbonUsageByCatLBS['fuel'] - oldFuelLBS;
 
-        result.innerHTML = `Your carbon usage is ${carbonUsageByCat['fuel'].toFixed(2)}kg 
+        result.innerHTML = `Your carbon usage is ${carbonUsageByCat['fuel'].toFixed(2)} kg 
                             (or ${carbonUsageByCatLBS['fuel'].toFixed(2)}lbs) for Fuel usage`;
         console.log(res);
         computeEmission();
@@ -362,8 +362,8 @@ async function getShippingEstimate(event) {
         totalCO2Estimate += carbonUsageByCat['freight'] - oldFreight;
         totalCO2EstimateLBS += carbonUsageByCatLBS['freight'] - oldFreightLBS;
 
-        shippingResult.innerHTML = `Your carbon usage is ${carbonUsageByCat['freight'].toFixed(2)}kg 
-                                    (or ${carbonUsageByCatLBS['freight'].toFixed(2)}lbs)`;
+        shippingResult.innerHTML = `Your carbon usage is ${carbonUsageByCat['freight'].toFixed(2)} kg 
+                                    (or ${carbonUsageByCatLBS['freight'].toFixed(2)} lbs)`;
         console.log(res);
         computeEmission();
 
@@ -482,8 +482,8 @@ function computeEmission() {
     const compareTo = document.querySelector('#total-emissions');
     const resultText = document.querySelector('#final-result');
 
-    kgRes.textContent = `In kg: ${totalCO2Estimate.toFixed(2)}kg`;
-    lbRes.textContent = `In lbs: ${totalCO2EstimateLBS.toFixed(2)}lbs`;
+    kgRes.textContent = `In kg: ${totalCO2Estimate.toFixed(2)} kg`;
+    lbRes.textContent = `In lbs: ${totalCO2EstimateLBS.toFixed(2)} lbs`;
 
     if (totalCO2Estimate === 0) {
         compareTo.textContent = 'Stolas';
