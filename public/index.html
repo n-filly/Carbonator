@@ -34,7 +34,7 @@
         <div class="col-xxl-4">
 
             <div class="card">
-                <div class="card-body">
+                <div class="card-body" id="elec-container">
                     <h2>Electricity</h2>
 
                     <label for="electricity-country-input" class="label">In what country was the electricity consumed?</label>
@@ -43,7 +43,7 @@
                     </select>
 
                     <label for="electricity-num-input" class="label">How much electricity was consumed?</label>
-                    <input type="number" id="electricity-num-input" class="elec" min="0"></input>
+                    <input type="number" id="electricity-num-input" class="elec" min="0" value="0"></input>
                 
                     <label for="electricity-unit-input" class="label">What is the unit of measurement?</label>
                     <select id="electricity-unit-input" class="elec">
@@ -60,7 +60,7 @@
             </div>
 
             <div class="card row">
-                <div class="card-body">
+                <div class="card-body" id="fuel-container">
                     <h2>Fuel</h2>
                     
                     <label for="fuel-type-input" class="label">What kind of fuel was burned?</label>
@@ -86,7 +86,7 @@
                     </select>
 
                     <label for="fuel-amount-input" class="label">How much of that fuel you are using?</label>
-                    <input type="number" id="fuel-amount-input" class="fuel" min="0"></input>
+                    <input type="number" id="fuel-amount-input" class="fuel" min="0" value="0"></input>
 
                     <div id="fuel-result" class="carbon-result"></div>
 
@@ -111,6 +111,12 @@
                     <h3 id="total-emissions"></h3>
                     <div id="final-result"></div>
                     <button type="button" id="reset-all">RESET ALL</button>
+                    <button type="button" id="save">SAVE</button>
+                    <button type="button" id="clear">CLEAR HISTORY</button>
+
+                    <h2>Saved Calculations...:</h2>
+                    <div id="warning"></div>
+                    <ul id="saved-calc"></ul>
                 </div>
             </div>
 
@@ -120,7 +126,7 @@
         <div class="col-xxl-4 row">
 
             <div class="card">
-                <div class="card-body">
+                <div class="card-body" id="vehicle-container">
                     <h2>Vehicles</h2>
                 
                     <label for="vehicle-size-input" class="label">What is the category/size of the vehicle?</label>
@@ -146,7 +152,7 @@
                     </select>
 
                     <label for="vehicle-distance-input" class="label">What distance was traveled?</label>
-                    <input type="number" id="vehicle-distance-input" class="vehicle" min="0"></input>
+                    <input type="number" id="vehicle-distance-input" class="vehicle" min="0" value="0"></input>
 
                     <div id="vehicle-result" class="carbon-result"></div>
 
@@ -156,7 +162,7 @@
             </div>
 
             <div class="card">
-                <div class="card-body">
+                <div class="card-body" id="freight-container">
                     <h2>Shipping</h2>
                     <label for="shipping-method-input" class="label">How are the goods being shipped?</label>
                     <select id="shipping-method-input" class="freight">
@@ -171,7 +177,7 @@
                     </select>
 
                     <label for="shipping-weight-input" class="label">How heavy is the cargo shipment?</label>
-                    <input type="number" id="shipping-weight-input" min="0" class="freight"></input>
+                    <input type="number" id="shipping-weight-input" min="0" class="freight" value="0"></input>
 
                     <label for="shipping-w-units-input" class="label">What is the weight unit?</label>
                     <select id="shipping-w-units-input" class="freight">
@@ -181,7 +187,7 @@
                     </select>
 
                     <label for="shipping-distance-input" class="label">How far is the shipment traveling?</label>
-                    <input type="number" id="shipping-distance-input" min="0" class="freight"></input>
+                    <input type="number" id="shipping-distance-input" min="0" class="freight" value="0"></input>
 
                     <label for="shipping-d-units-input" class="label">What is the distance unit?</label>
                     <select id="shipping-d-units-input" class="freight">

@@ -125,7 +125,7 @@ ul {
 }
 
 #center-card {
-    height: 760px;
+    min-height: 760px;
     width: 380px;
     background-color: #A9B3D6B8;
     border: solid 1px #525c7e
@@ -183,4 +183,23 @@ footer > p {
 
 * {
     border: solid 0.25px black;
+}
+
+#saved-calc:has(li) {
+    margin-bottom: 20px;
+    padding: 20px 40px;
+    border: solid 5px #f2d56e;
+    border-radius: 15px;
+    background-color: #fce184;
+    text-align: left;
+    line-height: 1rem;
+    font-size: 1.2rem;
+    font-weight: bold;
+    box-shadow: 5px 5px 10px #555;
+    cursor: pointer;
+}
+
+#saved-calc:has(li.clearQuery) {
+    background-color: #c1c1c1;
+    text-decoration: line-through;
 }
