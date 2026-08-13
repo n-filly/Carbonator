@@ -29,10 +29,122 @@
         </nav>
     </header>
 
+        <main>
+
+        <form class="card other-pages" id="feedback-form" method="POST" action="https://formsubmit.co/PLACEHOLDER">
+            <h1>Reach Out</h1>
+
+            <h3>Contact Info</h3>
+
+            <label for="sender-name" class="label">Your Name</label>
+            <input type="text" id="sender-name" name="sender-name" minlength="10" maxlength="40" placeholder="First Last" required>
+
+            <label for="sender-email" class="label">Your Email Address</label>
+            <input type="email" id="sender-email" name="sender-email" minlength="5" maxlength="50" placeholder="youremail@gmail.com" required>
+
+
+            <label for="sender-identity">Who are you?</label>
+            <div id="sender-identity-container">
+                <select id="sender-identity" required>
+                    <option value="" checked></option>
+                    <option value="student" checked>Student</option>
+                    <option value="teacher">Teacher</option>
+                    <option value="expert">Expert</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+
+            <label for="message-box">Send us a Message!</label>
+            <textarea id="message-box" rows="10" name="message-box"></textarea>
+
+
+            <h3>Project Feedback</h3>
+
+
+            <label for="usability">Was it easy to use / Did the design make sense?</label>
+            <div id="usability-container">
+                <select id="usability" class="options" required>
+                    <option value="" checked></option>
+                    <option value="yes">Yes</option>
+                    <option value="no">No</option>
+                </select>
+            </div>
+
+            <label for="bugs">Did you find a bug?</label>
+            <div id="bugs-container">
+                <select id="bugs" class="options" required>
+                    <option value=""></option>
+                    <option value="yes">Yes</option>
+                    <option value="no">No</option>
+                </select>
+            </div>
+
+            <input type="submit" class="button" value="Generate Thank You">
+        </form>
+
+        <div class="card other-pages">
+            <div class="card-body">
+                <img id="thank-you-img" src="images/thank-you_unsplash.png" alt='Hand in yellow sleeve holding up an ok sign with the text "You are the best!" floating above.'>
+                <h2>Thank you for your feedback!</h2>
+            </div>
+        </div>
+
+        </main>
+
     <footer>
         <p>&copy; Carbonator 2026. All rights reserved.</p>
     </footer>
 
+
+<script>
+
+    const feedbackForm = document.querySelector('#feedback-form');
+    const thankYou = document.querySelector('#thank-you');
+
+    function generate(event) {
+        event.preventDefault();
+        console.log(event);
+
+        this.style.display = "none";
+        thankYou.style.display = "block"
+    }
+
+    feedbackForm.addEventListener("submit", generate);
+
+    // I wasn't able to use innerHTML so I tried googling why and learned about the change event listener "change" for forms like this
+
+    const senderIdentity = document.querySelector('#sender-identity');
+    const identityOtherContainer = document.querySelector('#sender-identity-container');
+
+    senderIdentity.addEventListener("change", function () {
+        if (senderIdentity.value === "other") {
+            identityOtherContainer.innerHTML = `<textarea id="${senderIdentity.id}" rows="10" name="message-box" required ></textarea>`
+        }
+    });
+
+
+    const usabilityYesOrNo = document.querySelector('#usability');
+    const usabilityContainer = document.querySelector('#usability-container');
+
+    usabilityYesOrNo.addEventListener("change", function () {
+        if (usabilityYesOrNo.value === "no") {
+            usabilityContainer.innerHTML = `<textarea id="${usabilityYesOrNo.id}" rows="10" name="message-box" required></textarea>`
+        
+        }
+    });
+
+
+    const bugsYesOrNo = document.querySelector('#bugs');
+    const bugsContainer = document.querySelector('#bugs-container')
+
+    bugsYesOrNo.addEventListener("change", function () {
+        if (bugsYesOrNo.value === "yes") {
+        bugsContainer.innerHTML = `<textarea id="${bugsYesOrNo.id}" rows="10" name="message-box" required></textarea>`
+        }
+    });
+    
+
+</script>
 
 </body>
 </html>
