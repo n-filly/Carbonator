@@ -5,6 +5,7 @@ const button4 = document.querySelector('#shipping-calc');
 const button5 = document.querySelector('#reset-all');
 const button6 = document.querySelector('#save'); 
 const button7 = document.querySelector('#clear');
+const button8 = document.querySelector('#confirm-delete');
 
 const list = document.querySelector('#saved-calc');
 const indivResetBtn = document.querySelectorAll('.reset');
@@ -548,6 +549,7 @@ function saveToLocalStorage(event) {
 }
 
 function showHistory() {
+    list.innerHTML = ''
     let keys = Object.keys(localStorage);
     let total = Object.keys(localStorage).length;
 
@@ -587,15 +589,23 @@ function showHistory() {
                 `;
             item.id = key;
             item.addEventListener('click', clearQuery);
-            list.append(item);
+            list.prepend(item);
         }
     }
 }
 
 function clearQuery(event) {
     event.preventDefault();
+    this.classList.add('removed');
     let id = this.id;
-    localStorage.removeItem(id);
+    this.addEventListener('click', unselect);
+}
+
+function unselect(event) {
+    event.preventDefault();
+    this.classList.remove('removed');
+    this.removeEventListener('click', unselect);
+    this.addEventListener('click', clearQuery);
 }
 
 button1.addEventListener('click', fetchElec);
@@ -614,4 +624,11 @@ showHistory();
 button7.addEventListener('click', () => {
     localStorage.clear();
     location.reload();
+});
+
+button8.addEventListener('click', () => {
+    const removedItems = document.querySelectorAll('.removed');
+    removedItems.forEach(item => {
+        localStorage.removeItem(item.id);
+    });
 });

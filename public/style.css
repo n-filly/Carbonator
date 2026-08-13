@@ -199,7 +199,7 @@ footer > p {
     cursor: pointer;
 }
 
-#saved-calc li.clearQuery {
+.removed {
     background-color: #c1c1c1;
     text-decoration: line-through;
 }
