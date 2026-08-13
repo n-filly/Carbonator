@@ -489,6 +489,20 @@ function computeEmission() {
         compareTo.textContent = 'Stolas';
         resultText.textContent = 'You are like this demon owl prince!';
     }
+
+    //
+
+    if (5 >= kgRes >= 0 || 11 >= lbRes >= 0) {
+    compareTo = `<li> <ul>Charging a smartphone daily</ul> <ul>Leaving a laptop plugged in all day</ul> <ul>Using a microwave or toaster a few times</ul> </li>`;
+    } else if (50 >= kgRes > 5 || 110 >= lbRes > 11) {
+    compareTo = `<li> <ul>Driving a standard car for about 100 miles</ul> <ul>Running a typical household's electricity for one single day</ul> <ul>Burning a small tank of propane on a backyard grill</ul> </li>`;
+    } else if (500 >= kgRes > 50 || 1100 >= lbRes > 110) {
+    compareTo = `<li> <ul>Flying one-way on a short commercial flight</ul> <ul>Powering a large apartment's electricity for a full month</ul> <ul>Ordering a heavy freight shipment from across the country</ul> </li>`;
+    } else if (5000 >= kgRes > 500 || 11000 >= lbRes > 1100) {
+    compareTo = `<li> <ul>Driving an average gas-powered car for a whole year</ul> <ul>Taking multiple long-distance international flights</ul> <ul>Heating a large house with oil or gas through a freezing winter</ul> </li>`;
+    } else if (kgRes > 5000 || lbRes > 11000) {
+    compareTo = `<li> <ul>Moving heavy cargo shipments across oceans on a massive container ship</ul> <ul>The total yearly carbon footprint of an entire family</ul> <ul>Powering a small business office building for a year</ul> </li>`;
+    };
 }
 
 function inputCheck(containerID) {
@@ -635,19 +649,3 @@ button8.addEventListener('click', () => {
 
 //
 
-const emissionComparison = document.querySelector('#total-emissions');
-
-const kgComparison = document.querySelector('#kg');
-const lbComparison = document.querySelector('#lb');
-
-if (5 >= kgComparison >= 0 || 11 >= lbComparison >= 0) {
-    emissionComparison = `<li> <ul></ul> <ul></ul> <ul></ul> </li>`;
-} else if (50 >= kgComparison > 5 || 110 >= lbComparison > 11) {
-    emissionComparison = `<li> <ul></ul> <ul></ul> <ul></ul> </li>`;
-} else if (500 >= kgComparison > 50 || 1100 >= lbComparison > 110) {
-    emissionComparison = `<li> <ul></ul> <ul></ul> <ul></ul> </li>`;
-} else if (5000 >= kgComparison > 500 || 11000 >= lbComparison > 1100) {
-    emissionComparison = `<li> <ul></ul> <ul></ul> <ul></ul> </li>`;
-} else if (kgComparison > 5000 || lbComparison > 11000) {
-    emissionComparison = `<li> <ul></ul> <ul></ul> <ul></ul> </li>`;
-};
