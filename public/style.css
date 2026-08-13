@@ -10,6 +10,11 @@ h1, h2, h3, h4, h5, h6 , a{
     font-family: "Zalando Sans";
 }
 
+select, input, textarea, p {
+    font-family: "JetBrains Mono"
+}
+
+
 h1 {
     text-align: center;
     font-size: 60px;
@@ -23,11 +28,10 @@ h2 {
 h3 {
     text-align: center;
     font-size: 30px;
-    font-style: italic;
 }
 
-label, p {
-    font-family: "JetBrains Mono"
+#center-card h3 {
+    font-style: italic;
 }
 
 /*
@@ -136,25 +140,40 @@ ul {
 /*
 */
 
-form {
+.main-form {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-around;
 
 }
 
+
 .other-pages {
     width: 1180px;
-    height: 750px;
-    text-align: center;
-    position: ;
+    min-height: 750px;
+    margin: auto;
+    background-color: #E2D0A6D9;
 }
 
-select {
+.other-pages p {
+    font-size: 30px;
+}
+
+main {
+    text-align: center;
+    padding-top: 30px;
+}
+
+select, input, textarea {
     width: 100%;
     padding: 5px;
     margin-top: 3px;
     margin-bottom: 8px;
+}
+
+
+#feedback-form {
+    width: 30%;
 }
 
 .row {
@@ -162,6 +181,9 @@ select {
     justify-content: center;
 }
 
+#thank-you-img {
+    width: 100%;
+}
 
 footer {
     background-color: #362B11;
