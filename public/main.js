@@ -2,6 +2,13 @@ const button1 = document.querySelector('#elec-calc');
 const button2 = document.querySelector('#vehicle-calc');
 const button3 = document.querySelector('#fuel-calc');
 const button4 = document.querySelector('#shipping-calc');
+const button5 = document.querySelector('#reset-all');
+const button6 = document.querySelector('#save'); 
+const button7 = document.querySelector('#clear');
+const button8 = document.querySelector('#confirm-delete');
+
+const list = document.querySelector('#saved-calc');
+const indivResetBtn = document.querySelectorAll('.reset');
 
 const countryList = ["Australia", "Austria", "Bangladesh", "Belgium", "Bhutan", "Brunei", 
                     "Bulgaria", "Cambodia", "Canada", "China", "Croatia", "Cyprus", "Czechia",
@@ -59,12 +66,6 @@ const fuelInputs = {
     ]
 }
 
-const button5 = document.querySelector('#reset-all');
-// const button6 = document.querySelector(); Possible button to save the process to move that into the local storage
-
-const indivResetBtn = document.querySelectorAll('.reset');
-
-
 let totalCO2Estimate = 0;
 let totalCO2EstimateLBS = 0;
 
@@ -85,6 +86,36 @@ let carbonUsageByCatLBS = {
     freight : 0
 }
 
+let elecEst = {
+    country : '',
+    amount : '',
+    elecUnit : '',
+}
+
+let vehicleEst = {
+    vehicleType : '',
+    fuelType :  '',
+    distanceUnit : '',
+    distance : ''
+} 
+
+let fuelEst = {
+    fuelType : '',
+    fuelName : '',
+    fuelUnit : '',
+    fuelAmount : ''
+}
+
+let freightEst = {
+    shippingMethod : '',
+    shippingWeight : '',
+    massUnit : '',
+    distance : '',
+    distanceUnit : ''
+}
+
+
+
 function populateDropdowns(list, id) {
     const dropdown = document.querySelector(`#${id}`);
     list.forEach(function(item) {
@@ -97,11 +128,16 @@ function populateDropdowns(list, id) {
 
 async function fetchElec(event) {
     event.preventDefault();
+    const elecResult = document.querySelector('#elec-result'); 
+
+    if (!inputCheck('elec-container')) {
+        elecResult.textContent = "Please make sure to include an answer for each item.";
+        return;
+    }
 
     const country = document.querySelector('#electricity-country-input').value;
     const elecAmount = document.querySelector('#electricity-num-input').value;
     const unit = document.querySelector('#electricity-unit-input').value;
-    const elecResult = document.querySelector('#elec-result');
 
     const endpoint = "/.netlify/functions/getElec";
     const options = {
@@ -128,8 +164,15 @@ async function fetchElec(event) {
         totalCO2Estimate += carbonUsageByCat['elec'] - oldElec;
         totalCO2EstimateLBS += carbonUsageByCatLBS['elec'] - oldElecLBS;
 
-        elecResult.innerHTML = `Your carbon usage is ${carbonUsageByCat['elec']}kg (or ${carbonUsageByCatLBS['elec']}lbs) for Electricity usage`;
+        elecResult.innerHTML = `Your carbon usage is ${carbonUsageByCat['elec'].toFixed(2)}kg 
+                                (or ${carbonUsageByCatLBS['elec'].toFixed(2)} lbs) for Electricity usage`;
         console.log(res);
+        computeEmission();
+
+        elecEst.country = country;
+        elecEst.amount = parseFloat(elecAmount);
+        elecEst.elecUnit = unit;
+
         return res;
     } catch (error) {
         console.log(error);
@@ -139,12 +182,17 @@ async function fetchElec(event) {
 // We estimate using the vehicle's general type
 async function getVehicleCarbonEstimate(event) {
     event.preventDefault();
+    const vehicleResult = document.querySelector('#vehicle-result');
+
+    if (!inputCheck('vehicle-container')) {
+        vehicleResult.textContent = "Please make sure to include an answer for each item.";
+        return;
+    }
 
     const vehicleType = document.querySelector('#vehicle-size-input').value;
     const vehicleFuel = document.querySelector('#vehicle-fuel-input').value;
     const unit = document.querySelector('#vehicle-unit-input').value;
     const vehicleDist = document.querySelector('#vehicle-distance-input').value;
-    const vehicleResult = document.querySelector('#vehicle-result');
 
     const endpoint = "/.netlify/functions/getVehicle";
     const options = {
@@ -172,49 +220,37 @@ async function getVehicleCarbonEstimate(event) {
         totalCO2Estimate += carbonUsageByCat['vehicle'] - oldVehicle;
         totalCO2EstimateLBS += carbonUsageByCatLBS['vehicle'] - oldVehicleLBS;
 
-        vehicleResult.innerHTML = `Your carbon usage is ${carbonUsageByCat['vehicle']}kg (or ${carbonUsageByCatLBS['vehicle']}lbs)`;
-        console.log(res)
+        vehicleResult.innerHTML = `Your carbon usage is ${carbonUsageByCat['vehicle'].toFixed(2)}kg
+                                     (or ${carbonUsageByCatLBS['vehicle'].toFixed(2)} lbs)`;
+        console.log(res);
+        computeEmission();
+
+        vehicleEst.vehicleType = vehicleType;
+        vehicleEst.fuelType = vehicleFuel;
+        vehicleEst.distanceUnit = unit;
+        vehicleEst.distance = parseFloat(vehicleDist);
+
         return res;
     } catch(error) {
         console.log(error);
     }
 }
 
-// scrapped
-// async function getVehicleMakes() {
-//     const endpoint = "/.netlify/functions/getVehicleMakes";
-//     const options = {
-//         method : 'GET',
-//     }
-//     try {
-//         let response = await fetch(endpoint, options)
-//         let res = await response.json();
-//         return res;
-//     } catch (error) {
-//         console.log(error);
-//     }
-// }
-
-// async function showVehicleMakes() {
-//     const vehicleMakesList = await getVehicleMakes();
-
-//     const vehicleMakesDropdown = document.querySelector('#vehicle-size-input');
-
-//     vehicleMakesList.forEach(function(make) {
-//         let option = document.createElement('option');
-//         option.value = make.id;
-//         option.innerHTML = make.name;
-//         vehicleMakesDropdown.appendChild(option);
-//     });
-// }
-
 async function getFuelEstimate(event) {
     event.preventDefault();
+    const result = document.querySelector('#fuel-result');
+
+    if (!inputCheck('fuel-container')) {
+        result.textContent = "Please make sure to include an answer for each item.";
+        return;
+    }
 
     const fuelType = document.querySelector('#fuel-type-input').value;
     const fuelName = document.querySelector('#fuel-name-input').value;
-    const fuelAmount = document.querySelector('#fuel-amount-input').value;
-    const result = document.querySelector('#fuel-result');
+    const unit = document.querySelector('#fuel-unit-input').value;
+    const fuelAmount = document.querySelector('#fuel-amount-input').value; 
+
+    const intFuel = parseFloat(fuelAmount);
 
     const endpoint = "/.netlify/functions/getFuel";
     const options = {
@@ -225,7 +261,7 @@ async function getFuelEstimate(event) {
         body : JSON.stringify ({
             fuel_usage : fuelType,
             fuel_name : fuelName,
-            fuel_value : fuelAmount
+            fuel_value : unit === 'kg' ? intFuel / 1000 : convertLBStoKG(intFuel) / 1000 // convert to metric tonnes
         })
     }
     try {
@@ -241,8 +277,16 @@ async function getFuelEstimate(event) {
         totalCO2Estimate += carbonUsageByCat['fuel'] - oldFuel;
         totalCO2EstimateLBS += carbonUsageByCatLBS['fuel'] - oldFuelLBS;
 
-        result.innerHTML = `Your carbon usage is ${carbonUsageByCat['fuel']}kg (or ${carbonUsageByCatLBS['fuel']}lbs) for Fuel usage`;
+        result.innerHTML = `Your carbon usage is ${carbonUsageByCat['fuel'].toFixed(2)} kg 
+                            (or ${carbonUsageByCatLBS['fuel'].toFixed(2)}lbs) for Fuel usage`;
         console.log(res);
+        computeEmission();
+
+        fuelEst.fuelType = fuelType;
+        fuelEst.fuelName = fuelName;
+        fuelEst.fuelUnit = unit;
+        fuelEst.fuelAmount = intFuel;
+
         return res;
     } catch(error) {
         console.log(error);
@@ -277,13 +321,21 @@ function fuelInputCheck(event) {
 
 async function getShippingEstimate(event) {
     event.preventDefault();
+    const shippingResult = document.querySelector('#shipping-result');
+
+    if (!inputCheck('freight-container')) {
+        shippingResult.textContent = "Please make sure to include an answer for each item.";
+        return;
+    }
 
     const shippingMethod = document.querySelector('#shipping-method-input').value;
     const freightWeight = document.querySelector('#shipping-weight-input').value;
     const freightDist = document.querySelector('#shipping-distance-input').value;
     const weightUnit = document.querySelector('#shipping-w-units-input').value;
     const distUnit = document.querySelector('#shipping-d-units-input').value;
-    const shippingResult = document.querySelector('#shipping-result');
+
+    const intWeight = parseFloat(freightWeight);
+    const intDist = parseFloat(freightDist);
 
     const endpoint = "/.netlify/functions/getShipping";
     const options = {
@@ -293,8 +345,8 @@ async function getShippingEstimate(event) {
         }, 
         body : JSON.stringify ({
             transport_mode : shippingMethod,
-            freight_weight : freightWeight,
-            distance_value : freightDist
+            freight_weight : weightUnit === 'kg' ? intWeight : convertLBSToKG(intWeight),
+            distance_value : distUnit === 'km' ? intDist : convertMIToKM(intDist) 
         })
     }
     try {
@@ -310,21 +362,34 @@ async function getShippingEstimate(event) {
         totalCO2Estimate += carbonUsageByCat['freight'] - oldFreight;
         totalCO2EstimateLBS += carbonUsageByCatLBS['freight'] - oldFreightLBS;
 
-        shippingResult.innerHTML = `Your carbon usage is ${carbonUsageByCat['freight']}kg (or ${carbonUsageByCatLBS['freight']}lbs)`;
-        console.log(res)
+        shippingResult.innerHTML = `Your carbon usage is ${carbonUsageByCat['freight'].toFixed(2)} kg 
+                                    (or ${carbonUsageByCatLBS['freight'].toFixed(2)} lbs)`;
+        console.log(res);
+        computeEmission();
+
+        freightEst.shippingMethod = shippingMethod;
+        freightEst.shippingWeight = intWeight;
+        freightEst.massUnit = weightUnit;
+        freightEst.distance = intDist;
+        freightEst.distanceUnit = distUnit;
+
         return res;
     } catch(error) {
         console.log(error);
     }
 }
 
-// Maybe a reset button if the user want to remove everything instead of letting them manually edit everything to default?
 function resetAllInputContent(event) {
     event.preventDefault();
 
     const inputs = document.querySelectorAll('input, select');
     inputs.forEach(function(input) {
-        input.value = "";
+        if (input.tagName === 'INPUT') {
+            input.value = 0;
+        } else {
+            input.value = "";
+        }
+
         if (input.id === 'fuel-type-input') {
             fuelInputCheck(event);
         }
@@ -334,6 +399,25 @@ function resetAllInputContent(event) {
     containerResult.forEach(function(result) {
         result.innerHTML = "";
     })
+        elecEst.country = '';
+        elecEst.amount = '';
+        elecEst.elecUnit = '';
+
+        vehicleEst.vehicleType = '';
+        vehicleEst.fuelType = '';
+        vehicleEst.distanceUnit = '';
+        vehicleEst.distance = '';
+
+        fuelEst.fuelType = '';
+        fuelEst.fuelName = '';
+        fuelEst.fuelUnit = '';
+        fuelEst.fuelAmount = '';
+
+        freightEst.shippingMethod = '';
+        freightEst.shippingWeight = '';
+        freightEst.massUnit = '';
+        freightEst.distance = '';
+        freightEst.distanceUnit = '';
 
     totalCO2Estimate = 0;
     totalCO2EstimateLBS = 0;
@@ -341,11 +425,17 @@ function resetAllInputContent(event) {
         carbonUsageByCat[key] = 0;
         carbonUsageByCatLBS[key] = 0;
     });  
+    computeEmission();
 }
 
-// Clear a single section if the user no longer wants to calculate that, the parameter takes in the container_id
-// I kinda recommend that the id matches the dictionary key to reset the value
 function clearSingleSection(event){
+    let dictionarySelection = {
+        elec : elecEst,
+        vehicle : vehicleEst,
+        fuel : fuelEst,
+        freight : freightEst
+    }
+
     event.preventDefault();
     const btn = event.currentTarget;
     console.log(btn);
@@ -355,7 +445,11 @@ function clearSingleSection(event){
     const inputs = document.querySelectorAll(`.${id}`);
     
     inputs.forEach(function(input) {
-        input.value = "";
+        if (input.tagName === 'INPUT') {
+            input.value = 0;
+        } else {
+            input.value = "";
+        }
     });
 
     if (id == 'fuel') {
@@ -365,61 +459,176 @@ function clearSingleSection(event){
     const result = document.querySelector(`#${id}-result`);
     result.innerHTML = "";
 
+    let selectedDictionary = dictionarySelection[id];
+
+    Object.keys(selectedDictionary).forEach(function(key) {
+        selectedDictionary[key] = ''; 
+    });
+
     totalCO2Estimate -= carbonUsageByCat[btn.id];
     totalCO2EstimateLBS -= carbonUsageByCatLBS[btn.id];
     carbonUsageByCat[btn.id] = 0;
     carbonUsageByCatLBS[btn.id] = 0;
+    computeEmission();
 } 
 
-
-// Set event listener to the individual clear containers
 indivResetBtn.forEach(function(btn) {
     btn.addEventListener('click', clearSingleSection);
 })
 
-function compareEmission() {
+function computeEmission() {
     const kgRes = document.querySelector('#kg');
     const lbRes = document.querySelector('#lbs');
     const compareTo = document.querySelector('#total-emissions');
     const resultText = document.querySelector('#final-result');
 
-    kgRes.textContent = `In kg: ${totalCO2Estimate}kg`;
-    lbRes.textContent = `In lbs: ${totalCO2EstimateLBS}lbs`;
+    kgRes.textContent = `In kg: ${totalCO2Estimate.toFixed(2)} kg`;
+    lbRes.textContent = `In lbs: ${totalCO2EstimateLBS.toFixed(2)} lbs`;
 
     if (totalCO2Estimate === 0) {
         compareTo.textContent = 'Stolas';
         resultText.textContent = 'You are like this demon owl prince!';
     }
 }
-// Local storage of the 3 most recent calculation? (is it possible to have the history show what the user has input for each container?)
-// Might scrap this if its too complicated or its just an overkill for this project setting
-/*
-function saveToLocalStorage(event, param1, param2, ..., param-n) {
+
+function inputCheck(containerID) {
+    const container = document.querySelector(`#${containerID}`);
+    const inputs = container.querySelectorAll('input, select');
+    for (let input of inputs) {
+        if(input.value === "") {
+            return false;
+        }
+    }
+    return true;
+}
+
+function convertLBStoKG(amountLBS) {
+    return amountLBS / 2.20462262185;
+}
+
+function convertMItoKM(amountMI) {
+    return amountMI * 1.609344;
+}
+
+
+function saveToLocalStorage(event) {
     event.preventDefault();
-    localStorage.setItem(, );
+
+    let savedCalculations = {
+        electricity : elecEst,
+        vehicle : vehicleEst,
+        fuel : fuelEst,
+        shipping : freightEst,
+        breakdown : {
+            elec : carbonUsageByCat['elec'],
+            vehicle : carbonUsageByCat['vehicle'],
+            fuel : carbonUsageByCat['fuel'],
+            freight : carbonUsageByCat['freight'],
+        },
+        breakdownLBS : {
+            elec : carbonUsageByCatLBS['elec'],
+            vehicle : carbonUsageByCatLBS['vehicle'],
+            fuel : carbonUsageByCatLBS['fuel'],
+            freight : carbonUsageByCatLBS['freight'],
+        },
+        totalInKG : totalCO2Estimate,
+        totalInLBS : totalCO2EstimateLBS,
+    }
+
+    const warning = document.querySelector('#warning');
+    let date = new Date();
+
+    if (totalCO2Estimate === 0) {
+        warning.textContent = `Please calculate the emissions first before saving 
+                                (Or maybe your carbon emissions is close to zero XD)!`;
+    } else {
+        warning.textContent = '';
+        localStorage.setItem(date.toLocaleString(), JSON.stringify(savedCalculations));
+        showHistory();
+    }
+}
+
+function showHistory() {
+    list.innerHTML = ''
+    let keys = Object.keys(localStorage);
+    let total = Object.keys(localStorage).length;
+
+    if (total > 0) {
+        for (let key of keys) {
+            const saved = JSON.parse(localStorage.getItem(key));
+            let item = document.createElement('li');
+
+            console.log(saved);
+            
+            item.innerHTML = `
+                    <div class="history-date">${key}</div>
+                    <p>
+                        Electricity: ${saved.electricity.amount} ${saved.electricity.elecUnit}
+                        (${saved.electricity.country})
+                        → ${saved.breakdown.elec} kg (or ${saved.breakdownLBS.elec} lbs)
+                    </p>
+                    <p>
+                        Vehicle: ${saved.vehicle.vehicleType},
+                        ${saved.vehicle.fuelType},
+                        ${saved.vehicle.distance} ${saved.vehicle.distanceUnit}
+                        → ${saved.breakdown.vehicle} kg (or ${saved.breakdownLBS.vehicle} lbs)
+                    </p>
+                    <p>
+                        Fuel: ${saved.fuel.fuelAmount} ${saved.fuel.fuelUnit}
+                        ${saved.fuel.fuelName}
+                        → ${saved.breakdown.fuel} kg (or ${saved.breakdownLBS.fuel} lbs)
+                    </p>
+                    <p>
+                        Shipping: ${saved.shipping.shippingWeight} ${saved.shipping.massUnit},
+                        ${saved.shipping.distance} ${saved.shipping.distanceUnit}
+                        → ${saved.breakdown.freight} kg (or ${saved.breakdownLBS.freight} lbs)
+                    </p>
+                    <div class="history-total">
+                        Total: ${saved.totalInKG} kg (or ${saved.totalInLBS} lbs)
+                    </div>
+                `;
+            item.id = key;
+            item.addEventListener('click', clearQuery);
+            list.prepend(item);
+        }
+    }
 }
 
 function clearQuery(event) {
     event.preventDefault();
+    this.classList.add('removed');
+    let id = this.id;
+    this.addEventListener('click', unselect);
 }
 
-function clearLocalMemory(event){
+function unselect(event) {
     event.preventDefault();
+    this.classList.remove('removed');
+    this.removeEventListener('click', unselect);
+    this.addEventListener('click', clearQuery);
 }
-*/
-
-// Functions that can be likely to be included if the saveToLocalStorage method is a success: click to clear a history item and include the 4th most
-// recent into the local storage list once we remove it (removeQuery), and clear all method (clearLocalMemory)?
-
 
 button1.addEventListener('click', fetchElec);
 button2.addEventListener('click', getVehicleCarbonEstimate);
 button3.addEventListener('click', getFuelEstimate);
 button4.addEventListener('click', getShippingEstimate);
 button5.addEventListener('click', resetAllInputContent);
-// button6.addEventListener('click', saveToLocalStorage);
+button6.addEventListener('click', saveToLocalStorage);
 document.querySelector('#fuel-type-input').addEventListener('change', fuelInputCheck);
 
 populateDropdowns(countryList, 'electricity-country-input');
 populateDropdowns(vehicleTypesList, 'vehicle-size-input');
-compareEmission();
+computeEmission();
+showHistory();
+
+button7.addEventListener('click', () => {
+    localStorage.clear();
+    location.reload();
+});
+
+button8.addEventListener('click', () => {
+    const removedItems = document.querySelectorAll('.removed');
+    removedItems.forEach(function(item) {
+        localStorage.removeItem(item.id);
+    });
+});
